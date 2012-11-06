@@ -373,7 +373,7 @@ module Spree
       }, :without_protection => true)
 
       # SCIDEA INTEGRATION: call our integration code
-      Scidea::EcommerceApi.process_purchase(self) #qqq: this should move to a gem and may have to before this works
+      Scidea::EcommerceApi.process_purchase(self) #qqq: EcommerceApi should move to a gem and may have to before this works
     end
 
     def deliver_order_confirmation_email
