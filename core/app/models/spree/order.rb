@@ -363,7 +363,7 @@ module Spree
       update_shipment_state
       save
 
-      deliver_order_confirmation_email # QQQ confirm this is email to buyer not fulfiller
+      deliver_order_confirmation_email
 
       self.state_changes.create({
         :previous_state => 'cart',
@@ -372,8 +372,7 @@ module Spree
         :user_id        => self.user_id
       }, :without_protection => true)
 
-      # SCIDEA INTEGRATION: call our integration code
-      Scidea::EcommerceApi.process_purchase(self) #qqq: EcommerceApi should move to a gem and may have to before this works
+      EcommerceApi.process_purchase(self) # SCIDEA INTEGRATION
     end
 
     def deliver_order_confirmation_email
