@@ -22,14 +22,14 @@ Spree::CheckoutController.class_eval do
         state_callback(:after)
       else
         #flash[:error] = t(:payment_processing_failed)
-        flash[:error] = "QQQ: t(:payment_processing_failed)"
+        flash[:error] = I18n.t(:payment_processing_failed)
         respond_with(@order, :location => checkout_state_path(@order.state))
         return
       end
 
       if @order.state == 'complete' || @order.completed?
         #flash.notice = t(:order_processed_successfully)
-        flash.notice = "QQQ: t(:order_processed_successfully)"
+        flash.notice = I18n.t(:order_processed_successfully)
         flash[:commerce_tracking] = 'nothing special'
         respond_with(@order, :location => completion_route)
       else
