@@ -6,7 +6,7 @@
 
   <div data-hook="empty_cart">
     <p><%= t(:your_cart_is_empty) %></p>
-    <p><%= link_to t('dasboard.title'), '/dashboard', :class => 'button continue' %></p>
+    <p><%= link_to t('dashboard.title'), '/dashboard', :class => 'button continue' %></p>
   </div>
 
 <% else %>
@@ -40,7 +40,7 @@
       <p id="clear_cart_link" data-hook>
         <%= submit_tag t(:empty_cart), :class => 'button gray' %>
         <%= t(:or) %>
-        <%= link_to t('dasboard.title'), '/dashboard', :class => 'continue button gray' %>
+        <%= link_to t('dashboard.title'), '/dashboard', :class => 'continue button gray' %>
       </p>
     <% end %>
   </div>
