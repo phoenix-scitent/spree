@@ -991,7 +991,7 @@ en:
   state: State
   state_based: "State Based"
   state_setting_description: "Administer the list of states/provinces associated with each country."
-  states: States
+  states_spree: States
   status: Status
   stop: Stop
   store: Store
