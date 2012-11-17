@@ -539,7 +539,7 @@ en:
   month: "Month"
   my_account: "My Account"
   my_orders: "My Orders"
-  name: Name
+  name_spree: Name
   name_or_sku: "Name or SKU (enter at least first 4 characters of product name)"
   new: New
   new_adjustment: "New Adjustment"
@@ -954,6 +954,7 @@ en:
   show_only_complete_orders: "Only show complete orders"
   show_out_of_stock_products: "Show out-of-stock products"
   show_only_unfulfilled_orders: "Show only unfulfilled orders"
+  show_rate_in_label: "show rate in label"
   showing_first_n: "Showing first %{n}"
   sign_up: "Sign up"
   site_name: "Site Name"
