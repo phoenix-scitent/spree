@@ -1,27 +1,27 @@
 <div data-hook="admin_tax_rate_form_fields">
   <table data-hook="tax_rates">
     <tr data-hook="zone">
-      <td><%= f.label :zone, t(:zone) %></td>
+      <td><%= f.label :zone, I18n.t(:zone) %></td>
       <td><%= f.collection_select(:zone_id, @available_zones, :id, :name) %></td>
     </tr>
     <tr data-hook="name">
-      <td><%= f.label :name, t(:name) %></td>
+      <td><%= f.label :name, I18n.t(:name_spree) %></td>
       <td><%= f.text_field :name %></td>
     </tr>
     <tr data-hook="category">
-      <td><%= f.label :tax_category_id, t(:tax_category) %></td>
+      <td><%= f.label :tax_category_id, I18n.t(:tax_category) %></td>
       <td><%= f.collection_select(:tax_category_id, @available_categories,:id, :name) %></td>
     </tr>
     <tr data-hook="included">
-      <td><%= f.label :included_in_price, t(:included_in_price) %></td>
+      <td><%= f.label :included_in_price, I18n.t(:included_in_price) %></td>
       <td><%= f.check_box :included_in_price %></td>
     </tr>
     <tr data-hook="rate">
-      <td><%= f.label :amount, t(:rate) %></td>
+      <td><%= f.label :amount, I18n.t(:rate) %></td>
       <td><%= f.text_field :amount %></td>
     </tr>
     <tr data-hook="show_rate">
-      <td><%= f.label :show_rate_in_label, t(:show_rate_in_label) %></td>
+      <td><%= f.label :show_rate_in_label, I18n.t(:show_rate_in_label) %></td>
       <td><%= f.check_box :show_rate_in_label %></td>
     </tr>
   </table>
