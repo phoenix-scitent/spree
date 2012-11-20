@@ -12,7 +12,6 @@ module Spree
 
       def testmail
         @mail_method = Spree::MailMethod.find(params[:id])
-        binding.pry
         if TestMailer.test_email(@mail_method, try_spree_current_user).deliver
           flash.notice = I18n.t('admin.mail_methods.testmail.delivery_success')
         else
