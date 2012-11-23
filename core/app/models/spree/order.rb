@@ -362,8 +362,7 @@ module Spree
       shipments.each { |shipment| shipment.update!(self) }
       update_shipment_state
       save
-
-      deliver_order_confirmation_email
+      EcommerceApi.deliver_order_confirmation_email(self)
 
       self.state_changes.create({
         :previous_state => 'cart',
