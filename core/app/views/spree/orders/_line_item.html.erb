@@ -1,10 +1,10 @@
 <tr class="<%= cycle('', 'alt') %> line-item">
   <td class="cart-item-image" data-hook="cart_item_image">
-    <% if variant.images.length == 0 %>
-      <%= link_to small_image(variant.product), variant.product %>
-    <% else %>
-      <%= link_to image_tag(variant.images.first.attachment.url(:small)), variant.product %>
-    <% end %>
+    <%# if variant.images.length == 0 %>
+      <%#= link_to small_image(variant.product), variant.product %>
+    <%# else %>
+      <%#= link_to image_tag(variant.images.first.attachment.url(:small)), variant.product %>
+    <% # end %>
   </td>
   <td class="cart-item-description" data-hook="cart_item_description">
     <h4><%= link_to variant.product.name, product_path(variant.product) %></h4>

@@ -3,14 +3,6 @@
 /*--------------------------------------*/
 /* Basic styles 
 /*--------------------------------------*/
-body {
-  font-family: $ff_base;
-  color: $body_text_color;
-  line-height: 18px;
-  font-size: $base_font_size;
-  background-color: $layout_background_color;
-}
-
 /* Line style */
 hr {
   border-color: lighten($body_text_color, 60);
@@ -221,7 +213,7 @@ mark {background-color: $link_text_color; color: $layout_background_color; font-
 
       tr {
         th {
-          padding: 5px 10px;
+          padding: 10px;
         }
       }
     }
@@ -229,10 +221,11 @@ mark {background-color: $link_text_color; color: $layout_background_color; font-
     tbody, tfoot {
       tr {
         border-bottom: 1px solid lighten($body_text_color, 60);
+        background:#fff;
 
         td {
           vertical-align: middle;
-          padding: 5px 10px;
+          padding: 18px 10px;
         }
 
         &.alt, &.odd {
@@ -776,6 +769,8 @@ mark {background-color: $link_text_color; color: $layout_background_color; font-
   /*--------------------------------------*/
   table#cart-detail {
     width: 100%;
+    border:1px solid #d9d9d9;
+    margin-top:30px;
     tbody#line_items {
       tr {
 
@@ -1146,3 +1141,25 @@ mark {background-color: $link_text_color; color: $layout_background_color; font-
     }
         
   }
+
+
+table#cart-detail tbody#line_items tr td[data-hook="cart_item_price"],
+table#cart-detail tbody#line_items tr td[data-hook="cart_item_total"] {
+	color: $body_text_color;
+}
+
+table thead tr th {
+	border-right:1px solid #fff;
+	}
+	
+table tbody tr td.cart-item-image {
+	padding:0;
+	}
+
+table thead {
+	background-color: rgba(126,151,173,.2);
+	}
+
+table th.cart-item-delete-header {
+	border:none;
+	}			

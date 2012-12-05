@@ -1,6 +1,6 @@
 <% @body_id = 'cart' %>
 
-<h1><%= t(:shopping_cart) %></h1>
+<h1><%= t(:shopping_cart) %> <span style="font-size:.4em; display:inline-block; float:right">&larr; Continue Shopping</span></h1>
 
 <% if @order.line_items.empty? %>
 
@@ -35,7 +35,7 @@
     <% end %>
   </div>
 
-  <div id="empty-cart" data-hook>
+ <!-- <div id="empty-cart" data-hook>
     <%= form_tag empty_cart_path, :method => :put do %>
       <p id="clear_cart_link" data-hook>
         <%= submit_tag t(:empty_cart), :class => 'button gray' %>
@@ -44,5 +44,7 @@
       </p>
     <% end %>
   </div>
+  
+  -->
 
 <% end %>
