@@ -1,5 +1,7 @@
 <div class="columns alpha six" data-hook="billing_fieldset_wrapper">
-  <fieldset id="billing" data-hook>
+<h3 class="checkout-title"><%= t(@order.state, :scope => :order_state).titleize %></h3>  
+
+<fieldset id="billing" data-hook>
     <%= form.fields_for :bill_address do |bill_form| %>
       <!--<legend><%= t(:billing_address) %></legend>-->
       <div class="inner" data-hook="billing_inner">
@@ -13,7 +15,7 @@
         </p>
         <% if Spree::Config[:company] %>
           <p class="field" id="bcompany">
-            <%= bill_form.label :company, t(:company) %><br />
+            <%= bill_form.label :company, t(:company) %>
             <%= bill_form.text_field :company %>
           </p>
         <% end %>
@@ -22,7 +24,7 @@
           <%= bill_form.text_field :address1, :class => 'required' %>
         </p>
         <p class="field" id="baddress2">
-          <%= bill_form.label :address2, t(:street_address_2) %><br />
+          <%= bill_form.label :address2, t(:street_address_2) %>
           <%= bill_form.text_field :address2 %>
         </p>
 
