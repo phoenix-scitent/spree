@@ -37,7 +37,7 @@ module Spree
     end
 
     def self.with_coupon_code(coupon_code)
-      search(:code_cont => coupon_code).result
+      ransack(:code_contains => coupon_code).result
     end
 
     def activate(payload)
