@@ -436,7 +436,8 @@ module Spree
     end
 
     def pending_payments
-      payments.with_state('checkout')
+      #payments.with_state('checkout')
+      payments.select{|p| p.state == "checkout" }
     end
 
     def process_payments!
