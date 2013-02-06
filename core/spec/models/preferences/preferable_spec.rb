@@ -24,6 +24,11 @@ describe Spree::Preferences::Preferable do
     @a.stub(:persisted? => true)
     @b = B.new
     @b.stub(:persisted? => true)
+
+    # ensure we're persisting as that is the default
+    #
+    store = Spree::Preferences::Store.instance
+    store.persistence = true
   end
 
   describe "preference definitions" do
@@ -118,13 +123,13 @@ describe Spree::Preferences::Preferable do
       end
 
       it "retrieves a preference from the database before falling back to default" do
-        preference = mock(:value => "chatreuse")
-        Spree::Preference.should_receive(:find_by_name).with(:color).and_return(preference)
+        preference = mock(:value => "chatreuse", :key => 'a/color/123')
+        Spree::Preference.should_receive(:find_by_key).and_return(preference)
         @a.preferred_color.should == 'chatreuse'
       end
 
       it "defaults if no database key exists" do
-        Spree::Preference.should_receive(:find_by_name).and_return(nil)
+        Spree::Preference.should_receive(:find_by_key).and_return(nil)
         @a.preferred_color.should == 'green'
       end
     end
@@ -261,10 +266,10 @@ describe Spree::Preferences::Preferable do
 
       it "saves preferences for serialized object" do
         pr = PrefTest.new
-        pr[:pref_test_any] = [1, 2]
-        pr[:pref_test_any].should == [1, 2]
+        pr.set_preference(:pref_test_any, [1, 2])
+        pr.get_preference(:pref_test_any).should == [1, 2]
         pr.save!
-        pr[:pref_test_any].should == [1, 2]
+        pr.get_preference(:pref_test_any).should == [1, 2]
       end
     end
 

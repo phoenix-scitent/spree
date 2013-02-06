@@ -11,10 +11,6 @@ Spree::Core::Engine.routes.prepend do
   namespace :api do
     scope :module => :v1 do
       resources :products do
-        collection do
-          get :search
-        end
-
         resources :variants
         resources :product_properties
       end
@@ -22,11 +18,9 @@ Spree::Core::Engine.routes.prepend do
       resources :images
       resources :variants, :only => [:index] do
       end
-      
+
       resources :orders do
-        collection do
-          get :search
-        end
+        resources :return_authorizations
         member do
           put :address
           put :delivery
@@ -38,6 +32,7 @@ Spree::Core::Engine.routes.prepend do
         resources :payments do
           member do
             put :authorize
+            put :capture
             put :purchase
             put :void
             put :credit
@@ -58,6 +53,7 @@ Spree::Core::Engine.routes.prepend do
       resources :taxonomies do
         resources :taxons
       end
+      resources :inventory_units, :only => [:show, :update]
     end
   end
 end

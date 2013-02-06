@@ -3,8 +3,8 @@ require 'spec_helper'
 describe "Customer Details" do
   stub_authorization!
 
-  let(:shipping_method) { create(:shipping_method, :display_on => "front_end") }
-  let(:order) { create(:order_with_inventory_unit_shipped, :completed_at => 1.year.ago, :shipping_method => shipping_method) }
+  let(:order) { create(:order_with_inventory_unit_shipped, :completed_at => 1.year.ago) }
+
   let(:country) do
     create(:country, :name => "Kangaland")
   end
@@ -14,7 +14,7 @@ describe "Customer Details" do
   end
 
   before do
-    reset_spree_preferences do |config|
+    configure_spree_preferences do |config|
       config.default_country_id = country.id
       config.company = true
     end
@@ -25,7 +25,7 @@ describe "Customer Details" do
     bill_address = create(:address, :country => country, :state => state)
     create(:user, :email => 'foobar@example.com',
                   :ship_address => ship_address,
-                  :bill_address => bill_address) 
+                  :bill_address => bill_address)
 
     visit spree.admin_path
     click_link "Orders"
@@ -37,7 +37,7 @@ describe "Customer Details" do
       click_link "Customer Details"
       fill_in "customer_search", :with => "foobar"
       sleep(3)
-      page.execute_script %Q{ $('.ui-menu-item a:contains("foobar@example.com")').trigger("mouseenter").click(); }
+      page.execute_script %Q{ $('.ui-menu-item h4:contains("foobar@example.com")').click(); }
 
       ["ship_address", "bill_address"].each do |address|
         find_field("order_#{address}_attributes_firstname").value.should == "John"

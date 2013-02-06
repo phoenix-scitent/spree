@@ -16,8 +16,16 @@ module Spree
       go_to_state :address
       #go_to_state :delivery
       go_to_state :payment, :if => lambda { |order| order.payment_required? }
+      #go_to_state :payment, :if => lambda { |order|
+        # Fix for #2191
+       # if order.shipping_method
+       #   order.create_shipment!
+       #   order.send(:update_totals)
+       # end
+       #  order.payment_required?
+       # }
       go_to_state :confirm, :if => lambda { |order| order.confirmation_required? }
-      go_to_state :complete
+      go_to_state :complete, :if => lambda { |order| (order.payment_required? && order.payments.exists?) || !order.payment_required? }
       remove_transition :from => :delivery, :to => :confirm
     end
 
@@ -63,7 +71,8 @@ module Spree
     before_create :link_by_email
     after_create :create_tax_charge!
 
-    validates :email, :presence => true, :email => true, :if => :require_email
+    validates :email, :presence => true, :if => :require_email
+    validates :email, :email => true, :if => :require_email, :allow_blank => true
     validate :has_available_shipment
     validate :has_available_payment
 
@@ -127,6 +136,7 @@ module Spree
 
     # Is this a free order in which case the payment step should be skipped
     def payment_required?
+      update_totals
       total.to_f > 0.0
     end
 
@@ -343,6 +353,10 @@ module Spree
       end
     end
 
+    def can_ship?
+      self.complete? || self.resumed?
+    end
+
     def credit_cards
       credit_card_ids = payments.from_credit_card.map(&:source_id).uniq
       CreditCard.scoped(:conditions => { :id => credit_card_ids })
@@ -437,7 +451,7 @@ module Spree
 
     def pending_payments
       #payments.with_state('checkout')
-      payments.select{|p| p.state == "checkout" }
+      payments.select {|p| p.state == "checkout"}
     end
 
     def process_payments!
@@ -468,14 +482,27 @@ module Spree
       line_items.map { |li| li.variant.product }
     end
 
+    def variants
+      line_items.map(&:variant)
+    end
+
     def insufficient_stock_lines
       line_items.select &:insufficient_stock?
     end
 
     def merge!(order)
       order.line_items.each do |line_item|
-        self.add_variant(line_item.variant, line_item.quantity)
+        current_line_item = self.line_items.find_by_variant_id(line_item.variant_id)
+        if current_line_item
+          current_line_item.quantity += line_item.quantity
+          current_line_item.save
+        else
+          line_item.order_id = self.id
+          line_item.save
+        end
       end
+      # So that the destroy doesn't take out line items which may have been re-assigned
+      order.line_items.reload
       order.destroy
     end
 

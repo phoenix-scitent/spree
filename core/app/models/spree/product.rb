@@ -37,7 +37,7 @@ module Spree
     has_many :variants,
       :class_name => 'Spree::Variant',
       :conditions => { :is_master => false, :deleted_at => nil },
-      :order => :position
+      :order => "#{::Spree::Variant.quoted_table_name}.position ASC"
 
     has_many :variants_including_master,
       :class_name => 'Spree::Variant',
@@ -97,6 +97,16 @@ module Spree
     # returns true if the product has any variants (the master variant is not a member of the variants array)
     def has_variants?
       variants.any?
+    end
+
+    # should product be displayed on products pages and search
+    def on_display?
+      has_stock? || Spree::Config[:show_zero_stock_products]
+    end
+
+    # is this product actually available for purchase
+    def on_sale?
+      has_stock? || Spree::Config[:allow_backorders]
     end
 
     # returns the number of inventory units "on_hand" for this product

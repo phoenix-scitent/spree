@@ -11,9 +11,16 @@ describe Spree::Order do
 
   context "#next!" do
     context "when current state is confirm" do
-      before { order.state = "confirm" }
-      it "should finalize order when transitioning to complete state" do
+      before do 
+        order.state = "confirm"
         order.run_callbacks(:create)
+        order.stub :payment_required? => true
+        order.stub_chain(:payments, :exists?).and_return(true)
+        order.stub :process_payments!
+        order.stub :has_available_shipment
+      end
+
+      it "should finalize order when transitioning to complete state" do
         order.should_receive(:finalize!)
         order.next!
       end
@@ -21,7 +28,6 @@ describe Spree::Order do
        context "when credit card payment fails" do
          before do
            order.stub(:process_payments!).and_raise(Spree::Core::GatewayError)
-           order.stub :payment_required? => true
          end
 
          context "when not configured to allow failed payments" do
@@ -38,11 +44,11 @@ describe Spree::Order do
          context "when configured to allow failed payments" do
            before do
              Spree::Config.set :allow_checkout_on_gateway_error => true
+             order.stub :finalize!
            end
 
            it "should complete the order" do
-             pending
-              order.next
+              order.next!
               order.state.should == "complete"
             end
 
@@ -122,6 +128,8 @@ describe Spree::Order do
     end
 
     it "should send a cancel email" do
+      # Stub methods that cause side-effects in this test
+      order.stub :has_available_shipment
       order.stub :restock_items!
       mail_message = mock "Mail::Message"
       Spree::OrderMailer.should_receive(:cancel_email).with(order).and_return mail_message
@@ -135,6 +143,8 @@ describe Spree::Order do
         shipment.stub(:update_order)
         Spree::OrderMailer.stub(:cancel_email).and_return(mail_message = stub)
         mail_message.stub :deliver
+
+        order.stub :has_available_shipment
       end
 
       # Regression fix for #729
@@ -147,8 +157,11 @@ describe Spree::Order do
     context "resets payment state" do
       before do
         # TODO: This is ugly :(
+        # Stubs methods that cause unwanted side effects in this test
         Spree::OrderMailer.stub(:cancel_email).and_return(mail_message = stub)
         mail_message.stub :deliver
+        order.stub :has_available_shipment
+        order.stub :restock_items!
       end
 
       context "without shipped items" do
@@ -173,19 +186,15 @@ describe Spree::Order do
     it "should change shipment status (unless shipped)"
   end
 
-
   # Another regression test for #729
   context "#resume" do
     before do
       order.stub :email => "user@spreecommerce.com"
       order.stub :state => "canceled"
       order.stub :allow_resume? => true
-    end
 
-    it "should send a resume email" do
-      pending "Pending test for #818"
-      order.stub :unstock_items!
-      order.resume!
+      # Stubs method that cause unwanted side effects in this test
+      order.stub :has_available_shipment
     end
 
     context "unstocks inventory" do

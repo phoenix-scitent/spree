@@ -49,6 +49,7 @@ module Spree
       end
 
       def associate_user
+        @order ||= current_order
         if try_spree_current_user && @order
           if @order.user.blank? || @order.email.blank?
             @order.associate_user!(try_spree_current_user)
@@ -163,8 +164,8 @@ module Spree
         locale = session[:locale]
         locale ||= Spree::Config[:default_locale] unless Spree::Config[:default_locale].blank?
         locale ||= Rails.application.config.i18n.default_locale
-        locale ||= I18n.default_locale unless I18n.available_locales.include?(locale.to_sym)
-        I18n.locale = locale.to_sym
+        locale ||= I18n.default_locale unless I18n.available_locales.map(&:to_s).include?(locale)
+        I18n.locale = locale
       end
 
       # Returns which layout to render.

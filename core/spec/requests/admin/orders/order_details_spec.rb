@@ -7,7 +7,7 @@ describe "Order Details" do
   context "edit order page" do
 
     before do
-      reset_spree_preferences do |config|
+      configure_spree_preferences do |config|
         config.allow_backorders = true
       end
       create(:country)
@@ -50,7 +50,7 @@ describe "Order Details" do
       end
 
       I18n.backend.store_translations I18n.locale,
-        :shipment_state => { :missing => 'some text' },
+        :shipment_states => { :missing => 'some text' },
         :payment_states => { :missing => 'other text' }
 
       Spree::Config[:currency] = "GBP"

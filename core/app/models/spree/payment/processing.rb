@@ -29,6 +29,7 @@ module Spree
 
       def capture!
         return true if completed?
+        started_processing!
         protect_from_connection_error do
           check_environment
 
@@ -110,7 +111,7 @@ module Spree
       options = { :email    => order.email,
                   :customer => order.email,
                   :ip       => '192.168.1.100', # TODO: Use an actual IP
-                  :order_id => order.number }
+                  :order_id => "#{order.number}-#{self.identifier}" }
 
       options.merge!({ :shipping => order.ship_total * 100,
                        :tax      => order.tax_total * 100,
@@ -163,10 +164,6 @@ module Spree
       rescue ActiveMerchant::ConnectionError => e
         gateway_error(e)
       end
-    end
-
-    def record_log(response)
-      log_entries.create({:details => response.to_yaml}, :without_protection => true)
     end
 
     def gateway_error(error)

@@ -28,7 +28,7 @@ module Spree
 
     scope :with_state, lambda { |s| where(:state => s) }
     scope :shipped, with_state('shipped')
-    scope :ready,   with_state('ready')
+    scope :ready, with_state('ready')
     scope :pending, with_state('pending')
 
     def to_param
@@ -47,12 +47,16 @@ module Spree
     def cost
       adjustment ? adjustment.amount : 0
     end
+
     alias_method :amount, :cost
 
     # shipment state machine (see http://github.com/pluginaweek/state_machine/tree/master for details)
     state_machine :initial => 'pending', :use_transactions => false do
       event :ready do
-        transition :from => 'pending', :to => 'ready'
+        transition :from => 'pending', :to => 'ready', :if => lambda { |shipment|
+          # Fix for #2040
+          shipment.determine_state(shipment.order) == 'ready'
+        }
       end
       event :pend do
         transition :from => 'ready', :to => 'pending'
@@ -92,12 +96,24 @@ module Spree
       after_ship if new_state == 'shipped' and old_state != 'shipped'
     end
 
+    # Determines the appropriate +state+ according to the following logic:
+    #
+    # pending    unless order is complete and +order.payment_state+ is +paid+
+    # shipped    if already shipped (ie. does not change the state)
+    # ready      all other cases
+    def determine_state(order)
+      return 'pending' unless order.can_ship?
+      return 'pending' if inventory_units.any? &:backordered?
+      return 'shipped' if state == 'shipped'
+      order.paid? ? 'ready' : 'pending'
+    end
+
     private
       def generate_shipment_number
         return number unless number.blank?
         record = true
         while record
-          random = "H#{Array.new(11){rand(9)}.join}"
+          random = "H#{Array.new(11) { rand(9) }.join}"
           record = self.class.where(:number => random).first
         end
         self.number = random
@@ -111,18 +127,6 @@ module Spree
         unless shipping_method.nil?
           errors.add :shipping_method, I18n.t(:is_not_available_to_shipment_address) unless shipping_method.zone.include?(address)
         end
-      end
-
-      # Determines the appropriate +state+ according to the following logic:
-      #
-      # pending    unless order is complete and +order.payment_state+ is +paid+
-      # shipped    if already shipped (ie. does not change the state)
-      # ready      all other cases
-      def determine_state(order)
-        return 'pending' unless order.complete?
-        return 'pending' if inventory_units.any? &:backordered?
-        return 'shipped' if state == 'shipped'
-        order.paid? ? 'ready' : 'pending'
       end
 
       # Determines whether or not inventory units should be associated with the shipment.  This is always +false+ when

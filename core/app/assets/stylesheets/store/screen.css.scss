@@ -479,6 +479,10 @@ mark {background-color: $link_text_color; color: $layout_background_color; font-
           border-color: $link_text_color;
         }
 
+        img {
+          max-width: 100%; /* Fluid images for product */
+        }
+
       }
 
       .price {
@@ -533,6 +537,7 @@ mark {background-color: $link_text_color; color: $layout_background_color; font-
 
       img {
         min-height: 240px;
+        max-width: 100%; /* Fluid images for product */
       }
     }
     #product-thumbnails {
@@ -600,6 +605,14 @@ mark {background-color: $link_text_color; color: $layout_background_color; font-
   /*--------------------------------------*/
   /* Checkout
   /*--------------------------------------*/
+  .out-of-stock {
+    background: #df0000;
+    color: white;
+    padding: 5px;
+    padding-right: 10px;
+    font-weight: bold;
+  }
+
   .progress-steps {
     list-style: decimal inside;
     overflow: auto;

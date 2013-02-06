@@ -257,9 +257,10 @@ en:
   assign_taxon: "Assign Taxon"
   assign_taxons: "Assign Taxons"
   attachment_default_style: "Attachments Style"
-  attachment_default_url: "Attachments URL"
+  attachment_default_url: "Attachments Default URL"
   attachment_path: "Attachments Path"
   attachment_styles: "Paperclip Styles"
+  attachment_url: "Attachments URL"
   authorization_failure: "Authorization Failure"
   authorized: Authorized
   availability: "Availability"
@@ -388,8 +389,6 @@ en:
   email_server_settings_description: "Set email server settings."
   empty: "Empty"
   empty_cart: "Empty Cart"
-  enable_login_via_login_password: "Use standard email/password"
-  enable_login_via_openid: "Use OpenID instead"
   enable_mail_delivery: Enable Mail Delivery
   ending_in: "Ending in"
   enter_exactly_as_shown_on_card: Please enter exactly as shown on the card
@@ -470,7 +469,7 @@ en:
   image_settings: "Image Settings"
   image_settings_description: "Image Settings Description"
   image_settings_updated: "Image Settings successfully updated."
-  image_settings_warning: "You will need to regenerate thumbnails if you update the paperclip styles. Use rake paperclip:refresh:thumbnails to do this."
+  image_settings_warning: "You will need to regenerate thumbnails if you update the paperclip styles. Use rake paperclip:refresh:thumbnails CLASS=Spree::Image to do this."
   in_progress: "In Progress"
   include_in_shipment: Include in Shipment
   included_in_other_shipment: Included in another Shipment
@@ -508,14 +507,6 @@ en:
   live: "Live"
   loading: Loading
   locale_changed: "Locale Changed"
-  logged_in_as: "Logged in as"
-  logged_in_succesfully: "Logged in successfully"
-  logged_out: "You have been logged out."
-  login: Login
-  login_as_existing: "Login as Existing Customer"
-  login_failed: "Login authentication failed."
-  login_name: Login
-  logout: Logout
   look_for_similar_items: Look for similar items
   maestro_or_solo_cards: Maestro/Solo cards
   mail_delivery_enabled: "Mail delivery is enabled"
@@ -975,7 +966,8 @@ en:
   spree:
     date: Date
     date_picker:
-      format: 'yy/mm/dd'
+      format: ! '%Y/%m/%d'
+      js_format: 'yy/mm/dd'
     time: Time
   spree_gateway_error_flash_for_checkout: "There was a problem with your payment information. Please check your information and try again."
   spree_inventory_error_flash_for_insufficient_quantity: "An item in your cart has become unavailable."
@@ -1032,7 +1024,6 @@ en:
   test_mode: Test Mode
   thank_you_for_your_order: "Thank you for your business.  Please print out a copy of this confirmation page for your records."
   there_were_problems_with_the_following_fields: "There were problems with the following fields"
-  this_file_language: "English (US)"
   thumbnail: "Thumbnail"
   to_add_variants_you_must_first_define: "To add variants, you must first define"
   to_state: "To State"
@@ -1068,12 +1059,12 @@ en:
   users: Users
   validate_on_profile_create: Validate on profile create
   validation:
-    cannot_be_greater_than_available_stock: "cannot be greater than available stock."
     cannot_be_less_than_shipped_units: "cannot be less than the number of shipped units."
     cannot_destory_line_item_as_inventory_units_have_shipped: "Cannot destory line item as some inventory units have shipped."
     is_too_large: "is too large -- stock on hand cannot cover requested quantity!"
     must_be_int: "must be an integer"
     must_be_non_negative: "must be a non-negative value"
+    exceeds_available_stock: "exceeds available stock. Please ensure line items have a valid quantity."
   value: Value
   variant: Variant
   variants: Variants

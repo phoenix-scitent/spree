@@ -53,4 +53,27 @@ describe "Option Types" do
       page.should have_content("foo-size 99")
     end
   end
+
+  # Regression test for #2277
+  it "can remove an option value from an option type", :js => true do
+    create(:option_value)
+    click_link "Option Types"
+    within('table#listing_option_types') { click_link "Edit" }
+
+    wait_until do
+      page.find("tbody#option_values", :visible => true)
+    end
+
+    all("tbody#option_values tr.option_value").count.should == 1
+    within("tbody#option_values") do
+      find('.remove_fields').click
+    end
+    # Assert that the field is hidden automatically
+    all("tbody#option_values tr.option_value").select(&:visible?).count.should == 0
+
+    # Then assert that on a page refresh that it's still not visible
+    visit page.current_url
+    # What *is* visible is a new option value field, with blank values
+    all("tbody#option_values tr.option_value input").all? { |input| input.value.blank? }
+  end
 end

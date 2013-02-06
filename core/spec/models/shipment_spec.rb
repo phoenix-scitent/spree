@@ -1,11 +1,7 @@
 require 'spec_helper'
 
 describe Spree::Shipment do
-  before(:each) do
-    reset_spree_preferences
-  end
-
-  let(:order) { mock_model Spree::Order, :backordered? => false, :complete? => true }
+  let(:order) { mock_model Spree::Order, :backordered? => false, :can_ship? => true }
   let(:shipping_method) { mock_model Spree::ShippingMethod, :calculator => mock('calculator') }
   let(:shipment) do
     shipment = Spree::Shipment.new :order => order, :shipping_method => shipping_method
@@ -38,14 +34,14 @@ describe Spree::Shipment do
 
     shared_examples_for "pending if backordered" do
       it "should have a state of pending if backordered" do
-        shipment.stub(:inventory_units => [mock_model(Spree::InventoryUnit, :backordered? => true)] )
+        shipment.stub(:inventory_units => [mock_model(Spree::InventoryUnit, :backordered? => true)])
         shipment.should_receive(:update_column).with("state", "pending")
         shipment.update!(order)
       end
     end
 
-    context "when order is incomplete" do
-      before { order.stub :complete? => false }
+    context "when order cannot ship" do
+      before { order.stub :can_ship? => false }
       it "should result in a 'pending' state" do
         shipment.should_receive(:update_column).with("state", "pending")
         shipment.update!(order)
@@ -166,7 +162,14 @@ describe Spree::Shipment do
       mail_message.should_receive :deliver
       shipment.ship!
     end
+  end
 
+  context "#ready" do
+    # Regression test for #2040
+    it "cannot ready a shipment for an order if the order is unpaid" do
+      order.stub(:paid? => false)
+      assert !shipment.can_ready?
+    end
   end
 
   context "ensure_correct_adjustment" do
