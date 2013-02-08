@@ -14,9 +14,9 @@
 <table class="index" id='listing_zones' data-hook>
   <thead>
     <tr data-hook="zones_header">
-      <th><%= ransack_sort_link @search,:name, t(:name), :title => 'zones_order_by_name_title' %></th>
+      <th><%= sort_link @search,:name, t(:name), :title => 'zones_order_by_name_title' %></th>
       <th>
-        <%= ransack_sort_link @search,:description, t(:description), {}, {:title => 'zones_order_by_description_title'} %>
+        <%= sort_link @search,:description, t(:description), {}, {:title => 'zones_order_by_description_title'} %>
       </th>
       <th><%= t(:default_tax) %></th>
       <th></th>
