@@ -376,7 +376,7 @@ module Spree
       shipments.each { |shipment| shipment.update!(self) }
       update_shipment_state
       save
-      EcommerceApi.deliver_order_confirmation_email(self)
+      Scidea::EcommerceApi.deliver_order_confirmation_email(self)
 
       self.state_changes.create({
         :previous_state => 'cart',
@@ -385,7 +385,7 @@ module Spree
         :user_id        => self.user_id
       }, :without_protection => true)
 
-      EcommerceApi.process_purchase(self) # SCIDEA INTEGRATION
+      Scidea::EcommerceApi.process_purchase(self) # SCIDEA INTEGRATION
     end
 
     def deliver_order_confirmation_email
