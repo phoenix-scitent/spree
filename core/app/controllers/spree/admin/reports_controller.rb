@@ -6,7 +6,20 @@ module Spree
       AVAILABLE_REPORTS = {
         :sales_total => { :name => I18n.t(:sales_total), :description => I18n.t(:sales_total_description) }
       }
-
+      # from the decorator in spree_local_tax extension (engine)
+      (AVAILABLE_REPORTS ||= {}).merge!(
+          (ADVANCED_REPORTS ||= {}).merge!({
+                                               :local_tax => {
+                                                   name: 'Local Tax',
+                                                   description: 'Local taxation report by city'
+                                               },
+                                               :orders_local_tax => {
+                                                   name: 'Local Tax by Order',
+                                                   description: 'Local taxation report by order'
+                                               }
+                                           })
+      )
+      
       def index
         @reports = AVAILABLE_REPORTS
         respond_with(@reports)

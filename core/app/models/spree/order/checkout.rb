@@ -44,6 +44,7 @@ module Spree
               after_transition do |order|
                 order.state = order.state
                 order.save
+                order.create_tax_charge!
               end
 
               event :cancel do
