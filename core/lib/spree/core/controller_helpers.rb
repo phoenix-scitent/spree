@@ -32,7 +32,8 @@ module Spree
       # proxy method to *possible* spree_current_user method
       # Authentication extensions (such as spree_auth_devise) are meant to provide spree_current_user
       def try_spree_current_user
-        respond_to?(:spree_current_user) ? spree_current_user : nil
+        respond_to?(:spree_current_user) ? spree_current_user : current_user   # TODO: current_user was nil, which is not so useful [so why is spree_current_user non-functione?]
+        #respond_to?(:spree_current_user) ? spree_current_user : nil
       end
 
       def title
