@@ -60,8 +60,7 @@ module Spree
         app.config.spree.payment_methods = [
             Spree::Gateway::Bogus,
             Spree::Gateway::BogusSimple,
-            Spree::PaymentMethod::Check,
-            Spree::PaymentMethod::Fastspring ]
+            Spree::PaymentMethod::Check ]
       end
 
       # filter sensitive information during logging
