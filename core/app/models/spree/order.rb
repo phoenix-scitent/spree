@@ -466,6 +466,7 @@ module Spree
           end
         end
       rescue Core::GatewayError
+        puts "\n* * * * SPREE CORE GATEWAY ERROR via Spree::Order#process_payments! * * * * "
         !!Spree::Config[:allow_checkout_on_gateway_error]
       end
     end

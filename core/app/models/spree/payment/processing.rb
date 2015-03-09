@@ -6,12 +6,16 @@ module Spree
           if source
             if !processing?
               if Spree::Config[:auto_capture]
+                puts "\n* * * * Spree::Payment.purchase! * * * * "
                 purchase!
               else
+                puts "\n* * * * Spree::Payment.authorize! * * * * "
                 authorize!
               end
             end
           else
+            puts "\n* * * * Core::GatewayError.new(I18n.t(:payment_processing_failed)) * * * * "
+
             raise Core::GatewayError.new(I18n.t(:payment_processing_failed))
           end
         end
@@ -162,19 +166,23 @@ module Spree
       begin
         yield
       rescue ActiveMerchant::ConnectionError => e
+        puts "\n* * * * rescue ActiveMerchant::ConnectionError in def protect_from_connection_error * * * * "
         gateway_error(e)
       end
     end
 
     def gateway_error(error)
       if error.is_a? ActiveMerchant::Billing::Response
+        puts "\n* * * * error.is_a? ActiveMerchant::Billing::Response * * * * "
         text = error.params['message'] || error.params['response_reason_text'] || error.message
       elsif error.is_a? ActiveMerchant::ConnectionError
+        puts "\n* * * * error.is_a? ActiveMerchant::ConnectionError * * * * "
         text = I18n.t(:unable_to_connect_to_gateway)
       else
         text = error.to_s
       end
       logger.error(I18n.t(:gateway_error))
+      puts "  #{error.to_yaml}"
       logger.error("  #{error.to_yaml}")
       raise Core::GatewayError.new(text)
     end
