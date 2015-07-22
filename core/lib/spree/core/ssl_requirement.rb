@@ -100,6 +100,9 @@ module SslRequirement
     end
 
     def ensure_proper_protocol
+      return true
+      # Added above by Tim J.
+      # We are forcing SSL now at the Nginx level, not the app, gem or Spree level.
       return true if ssl_allowed?
       if ssl_required? && !request.ssl? && ssl_supported?
         redirect_to "https://" + request.host + request.fullpath
