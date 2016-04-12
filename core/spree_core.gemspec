@@ -26,8 +26,8 @@ Gem::Specification.new do |s|
   # This is because 2.2.0 uses jQuery 1.9 which breaks the jquery.horizontalNav
   # plugin that we are using in the admin backend.
   s.add_dependency 'jquery-rails', '~> 2.1.4'
-  s.add_dependency 'select2-rails', '~> 3.2'
-
+  s.add_dependency 'select2-rails', '~> 3.2', '~> 3.0'
+  
   s.add_dependency 'highline', '= 1.6.11'
   s.add_dependency 'state_machine', '= 1.1.2'
   s.add_dependency 'ffaker', '~> 1.12.0'
