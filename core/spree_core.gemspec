@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'paperclip', '~> 2.8'
   s.add_dependency 'aws-sdk', '~> 1.3.4'
   s.add_dependency 'ransack', '~> 0.7.2'
-  s.add_dependency 'activemerchant', '~> 1.29.3'
+  s.add_dependency 'activemerchant', '~> 1.50.0'
   s.add_dependency 'rails', '~> 3.2.11'
   s.add_dependency 'kaminari', ' ~> 0.14.1'
   s.add_dependency 'deface', '>= 0.9.0'
