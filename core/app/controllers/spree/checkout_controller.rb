@@ -38,6 +38,7 @@ module Spree
         else
           respond_with(@order, :location => checkout_state_path(@order.state))
         end
+        redirect_to :back
       else
         respond_with(@order) { |format| format.html { render :edit } }
       end
